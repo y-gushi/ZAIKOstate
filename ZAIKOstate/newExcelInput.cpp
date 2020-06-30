@@ -6,7 +6,7 @@
 
 excelRead::excelRead()
 {
-    
+    onetimefn[255] = { 0 };
 }
 
 excelRead::~excelRead()
@@ -402,7 +402,7 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
  
     //ファイル書き出し用
     _Post_ _Notnull_ FILE* cdf;
-    fopen_s(&cdf, recd, "wb");
+    fopen_s(&cdf, onetimefn, "wb");
     if (!cdf) {
         const char ef[] = "file open error";
         size_t fnlen = 0;
@@ -413,7 +413,7 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
         erroritem->itn = (UINT8*)malloc(16);
         erroritem->col = (UINT8*)malloc(fnlen);
         memcpy(erroritem->itn, ef, 16);
-        memcpy(erroritem->col, plfn, fnlen);
+        memcpy(erroritem->col, onetimefn, fnlen);
         erroritem->next = nullptr;
 
         return erroritem;
@@ -700,16 +700,30 @@ char* excelRead::writename(char* wfn, int len)
     char c[] = "Centraldata";//11
     int i = 0;
     int pathlen = 0;
+    int slashnum = 0;
+    int centerlen = 0;
 
     if (fn) {
         while (wfn[i] != '.' && i < len) {
             fn[i] = wfn[i];
-            i++;
+            if (slashnum < 2) {
+                onetimefn[centerlen] = wfn[centerlen];
+                centerlen++;
+            }
+            i++; slashnum++;
         }
         pathlen = i;
         while (wfn[pathlen] != '/' && pathlen > 0) {
             pathlen--;
         }
+
+        for (int j = 0; j < 11; j++) {
+            onetimefn[centerlen] = c[centerlen];
+            centerlen++;
+        }
+
+        onetimefn[centerlen] = '\0';
+
         fn[i] = '2';// .記入
         i++;
         fn[i] = wfn[i - 1];// .記入

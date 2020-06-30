@@ -43,6 +43,7 @@ public:
 
 	char* fpath = nullptr;
 
+	char onetimefn[];
 
 	Items* addItems(Items* base, Items* itm);
 	char* writename(char* wfn, int len);
