@@ -78,35 +78,40 @@ char* excelRead::searchshipplace(char* pl) {
         result = strncmp(mss, ms, 8);
         if (result == 0) {
             char* sty = (char*)malloc(5);
-            strcpy_s(sty, 5, magas);
+            memcpy(sty, magas, 5);
+            //strcpy_s(sty, 5, magas);
             return sty;
         }
 
         result = strncmp(mss, sl, 8);
         if (result == 0) {
             char* sty = (char*)malloc(5);
-            strcpy_s(sty, 5, shpls);
+            memcpy(sty, shpls, 5);
+            //strcpy_s(sty, 5, shpls);
             return sty;
         }
 
         result = strncmp(sbs, sb, 6);
         if (result == 0) {
             char* sty = (char*)malloc(5);
-            strcpy_s(sty, 5, smarbs);
+            memcpy(sty, smarbs, 5);
+            //strcpy_s(sty, 5, smarbs);
             return sty;
         }
 
         result = strncmp(zos, zo, 4);
         if (result == 0) {
             char* sty = (char*)malloc(5);
-            strcpy_s(sty, 5, zozos);
+            memcpy(sty, zozos, 5);
+            //strcpy_s(sty, 5, zozos);
             return sty;
         }
 
         result = strncmp(bes, be, 4);
         if (result == 0) {
             char* sty = (char*)malloc(5);
-            strcpy_s(sty, 5, bees);
+            memcpy(sty, bees, 5);
+            //strcpy_s(sty, 5, bees);
             return sty;
         }
 
@@ -114,7 +119,8 @@ char* excelRead::searchshipplace(char* pl) {
     }
 
     char* sty = (char*)malloc(5);
-    strcpy_s(sty, 5, bees);
+    memcpy(sty, bees, 5);
+    //strcpy_s(sty, 5, bees);
     
     return sty;
 }
@@ -133,7 +139,7 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
     char *inMainstr;
 
     //ワイド文字列(WCHAR*)をマルチバイト文字列(char*)に変換
-    char	wStrC[100] = { 0 };
+    char	wStrC[200] = { 0 };
     size_t wLen = 0;
     errno_t err = 0;
 
@@ -149,15 +155,15 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
     //変換
     err = wcstombs_s(&wLen, wStrC, 100, intxto, _TRUNCATE);
     
-    inMainstr = (char*)malloc(100);
+    inMainstr = (char*)malloc(200);
     
     inMainstr=SJIStoUTF8(wStrC, inMainstr, 100);//shift-jis utf8変換
 
     if (lstrlenW(intxts) > 0) {
         //変換
-        err = wcstombs_s(&wLen, wStrC, 50, intxts, _TRUNCATE);
-        inSubstr = (char*)malloc(50);//サブ文字 1上　char変換
-        inSubstr=SJIStoUTF8(wStrC, inSubstr, 50);
+        err = wcstombs_s(&wLen, wStrC, 100, intxts, _TRUNCATE);
+        inSubstr = (char*)malloc(200);//サブ文字 1上　char変換
+        inSubstr=SJIStoUTF8(wStrC, inSubstr, 100);
     }
     else {
         inSubstr = &strend;
@@ -165,7 +171,7 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
     if (lstrlenW(intxttwo) > 0) {
         //変換
         err = wcstombs_s(&wLen, wStrC, 50, intxttwo, _TRUNCATE);
-        inTwostr = (char*)malloc(50);//サブ文字 1上　char変換
+        inTwostr = (char*)malloc(100);//サブ文字 1上　char変換
         inTwostr = SJIStoUTF8(wStrC, inTwostr, 50);
     }
     else {
@@ -174,7 +180,7 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
     if (lstrlenW(intxtthree) > 0) {
         //変換
         err = wcstombs_s(&wLen, wStrC, 50, intxtthree, _TRUNCATE);
-        inThreestr = (char*)malloc(50);//サブ文字 1上　char変換
+        inThreestr = (char*)malloc(100);//サブ文字 1上　char変換
         inThreestr = SJIStoUTF8(wStrC, inThreestr, 50);
     }
     else {
@@ -183,7 +189,7 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
     if (lstrlenW(intxtfour) > 0) {
         //変換
         err = wcstombs_s(&wLen, wStrC, 50, intxtfour, _TRUNCATE);
-        inFourstr = (char*)malloc(50);//サブ文字 1上　char変換
+        inFourstr = (char*)malloc(100);//サブ文字 1上　char変換
         inFourstr = SJIStoUTF8(wStrC, inFourstr, 50);
     }
     else {
@@ -253,10 +259,12 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
             fnlen++;
         fnlen++;
         Items* erroritem = (Items*)malloc(sizeof(Items));
-        erroritem->itn = (UINT8*)malloc(27);
+        erroritem->itn = (UINT8*)malloc(16);
         erroritem->col = (UINT8*)malloc(fnlen);
-        strcpy_s((char*)erroritem->itn,27,ef);
-        strcpy_s((char*)erroritem->col, fnlen, (const char*)plfn);
+        //strcpy_s((char*)erroritem->itn,16,ef);
+        //strcpy_s((char*)erroritem->col, fnlen, (const char*)plfn);
+        memcpy(erroritem->itn, ef, 16);
+        memcpy(erroritem->col, plfn, fnlen);
         erroritem->next = nullptr;
 
         return erroritem;
@@ -332,10 +340,10 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
             fnlen++;
         fnlen++;
         Items* erroritem = (Items*)malloc(sizeof(Items));
-        erroritem->itn = (UINT8*)malloc(27);
+        erroritem->itn = (UINT8*)malloc(16);
         erroritem->col = (UINT8*)malloc(fnlen);
-        strcpy_s((char*)erroritem->itn, 27, ef);
-        strcpy_s((char*)erroritem->col, fnlen, (const char*)plfn);
+        memcpy(erroritem->itn, ef, 16);
+        memcpy(erroritem->col, plfn, fnlen);
         erroritem->next = nullptr;
 
         return erroritem;
@@ -402,10 +410,10 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
             fnlen++;
         fnlen++;
         Items* erroritem = (Items*)malloc(sizeof(Items));
-        erroritem->itn = (UINT8*)malloc(27);
+        erroritem->itn = (UINT8*)malloc(16);
         erroritem->col = (UINT8*)malloc(fnlen);
-        strcpy_s((char*)erroritem->itn, 27, ef);
-        strcpy_s((char*)erroritem->col, fnlen, (const char*)plfn);
+        memcpy(erroritem->itn, ef, 16);
+        memcpy(erroritem->col, plfn, fnlen);
         erroritem->next = nullptr;
 
         return erroritem;
@@ -420,10 +428,10 @@ Items* excelRead::datawrite(char* plfn, int pllen, char* orderfn, int orderlen, 
             fnlen++;
         fnlen++;
         Items* erroritem = (Items*)malloc(sizeof(Items));
-        erroritem->itn = (UINT8*)malloc(27);
+        erroritem->itn = (UINT8*)malloc(16);
         erroritem->col = (UINT8*)malloc(fnlen);
-        strcpy_s((char*)erroritem->itn, 27, ef);
-        strcpy_s((char*)erroritem->col, fnlen, (const char*)plfn);
+        memcpy(erroritem->itn, ef, 16);
+        memcpy(erroritem->col, plfn, fnlen);
         erroritem->next = nullptr;
 
         return erroritem;

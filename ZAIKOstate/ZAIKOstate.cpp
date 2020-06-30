@@ -372,8 +372,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             DestroyWindow(hWnd);
             break;
         case BUTTON1:
-            GetFileName(hWnd, fn, 100, inipl);
-            TCHAR bufb[100];
+            GetFileName(hWnd, fn, 1000, inipl);
+            TCHAR bufb[1000];
             cs.changechar(o.lpstrFile);
             cs.filename[cs.len] = '\0';
 #ifdef UNICODE
@@ -385,7 +385,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             MessageBox(hWnd, bufb, L"ファイル名", MB_OK);
             break;
         case BUTTON2:
-            GetFileName(hWnd, fn, 100, inipl);
+            GetFileName(hWnd, fn, 1000, inipl);
             ci.changechar(o.lpstrFile);
             ci.filename[ci.len] = '\0';
 #ifdef UNICODE
